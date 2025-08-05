@@ -57,6 +57,27 @@ locals {
   openshift_version = var.openshift_version != "" ? var.openshift_version : data.rhcs_versions.all.items[0].name
 }
 
+module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "5.1.0"
+
+  name = "rosa-hcp-vpc"
+  cidr = var.machine_cidr
+
+  azs             = var.aws_availability_zones
+  private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  public_subnets  = []
+
+  enable_dns_hostnames = true
+  enable_dns_support   = true
+
+  tags = {
+    Terraform = "true"
+  }
+}
+
+
+
 module "rosa_hcp" {
   source                           = "terraform-redhat/rosa-hcp/rhcs"
   version                          = "1.6.2"
@@ -64,16 +85,12 @@ module "rosa_hcp" {
   openshift_version      = var.openshift_version
   aws_region             = var.aws_region
   aws_availability_zones = var.aws_availability_zones
+  aws_subnet_ids       = module.vpc.vpc.public_subnets
 
-  create_account_roles   = true
-  create_operator_roles  = true
-  create_vpc             = true
 
-  operator_roles_prefix  = var.cluster_name
+  operator_role_prefix  = var.cluster_name
   account_role_prefix    = var.cluster_name
 
-  create_oidc_provider   = true
-  create_admin_user      = true 
 }
 
 
@@ -82,8 +99,9 @@ module "rosa_hcp" {
 module "oidc_config_and_provider" {
   source  = "terraform-redhat/rosa-hcp/rhcs"
   version = "1.6.2"
-  managed            = true
-  installer_role_arn = module.create_account_roles.account_roles_arn["Installer"]
+  cluster_name           = var.cluster_name
+  openshift_version      = var.openshift_version
+  aws_subnet_ids       = module.vpc.vpc.public_subnets
   tags               = var.tags
 }
 
@@ -111,7 +129,7 @@ resource "rhcs_cluster_rosa_hcp" "rosa_hcp_cluster" {
   # Compute configuration  
   replicas             = var.replicas
   compute_machine_type = var.compute_machine_type
-  aws_subnet_ids       = module.hcp.vpc_subnet_ids
+  aws_subnet_ids       = module.vpc.vpc.public_subnets
 
 #  aws_subnet_ids = local.private_cluster ? [
 #    aws_subnet.private_subnets[0].id,
