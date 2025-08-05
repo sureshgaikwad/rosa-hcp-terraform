@@ -60,9 +60,6 @@ locals {
 module "rosa_hcp" {
   source                           = "terraform-redhat/rosa-hcp/rhcs"
   version                          = "1.6.2"
-  cluster_name                     = var.cluster_name
-  openshift_version                = var.openshift_version
-
   cluster_name           = var.cluster_name
   openshift_version      = var.openshift_version
   aws_region             = var.aws_region
