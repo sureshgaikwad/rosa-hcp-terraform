@@ -1,6 +1,5 @@
 output "cluster_id" {
-  description = "ID of the created ROSA cluster"
-  value       = rhcs_cluster_rosa_hcp.rosa_hcp_cluster.id
+  value = module.rosa_hcp.cluster_id
 }
 
 output "cluster_name" {
@@ -15,7 +14,7 @@ output "api_url" {
 
 output "console_url" {
   description = "Console URL of the ROSA cluster"
-  value       = rhcs_cluster_rosa_hcp.rosa_hcp_cluster.console_url
+  value       = module.rosa_hcp.console_url
 }
 
 output "cluster_admin_username" {
@@ -51,7 +50,7 @@ output "region" {
 
 output "oidc_config_id" {
   description = "ID of the OIDC configuration"
-  value       = module.oidc_config_and_provider.oidc_config_id
+  value       = module.rosa_hcp.oidc_endpoint_url
 }
 
 output "account_role_prefix" {
@@ -64,6 +63,3 @@ output "operator_role_prefix" {
   value       = module.operator_roles.operator_role_prefix
 }
 
-output "cluster_id" {
-  value = module.rosa_hcp.cluster_id
-}
