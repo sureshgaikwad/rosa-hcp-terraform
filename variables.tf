@@ -1,13 +1,13 @@
 variable "cluster_name" {
   description = "Name of the ROSA cluster"
   type        = string
-  default     = "rosa-hcp-cluster"
+  default     = "sgaikwad-hcp-cluster"
 }
 
-variable "region" {
+variable "aws_region" {
   description = "AWS region for the cluster"
   type        = string
-  default     = "us-east-1"
+  default     = "ap-south-1"
 }
 
 variable "cluster_type" {
@@ -23,7 +23,7 @@ variable "cluster_type" {
 variable "openshift_version" {
   description = "OpenShift version for the cluster"
   type        = string
-  default     = "4.14.15"
+  default     = "4.19.4"
 }
 
 variable "compute_machine_type" {
@@ -38,7 +38,7 @@ variable "replicas" {
   default     = 3
 }
 
-variable "availability_zones" {
+variable "aws_availability_zones" {
   description = "List of availability zones"
   type        = list(string)
   default     = ["us-east-1a", "us-east-1b", "us-east-1c"]
@@ -49,6 +49,12 @@ variable "machine_cidr" {
   type        = string
   default     = "10.0.0.0/16"
 }
+
+#variable "aws_subnet_ids" {
+#  description = "List of subnet IDs"
+#  type        = list(string)
+#}
+
 
 variable "service_cidr" {
   description = "CIDR block for services"

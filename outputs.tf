@@ -64,3 +64,6 @@ output "operator_role_prefix" {
   value       = module.operator_roles.operator_role_prefix
 }
 
+output "cluster_id" {
+  value = module.rosa_hcp.cluster_id
+}

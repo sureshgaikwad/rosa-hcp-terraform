@@ -57,31 +57,28 @@ locals {
   openshift_version = var.openshift_version != "" ? var.openshift_version : data.rhcs_versions.all.items[0].name
 }
 
-# Create account roles (if not already existing)
-module "create_account_roles" {
-  source  = "terraform-redhat/rosa-hcp/rhcs"
-  version = "1.6.2"
+module "rosa_hcp" {
+  source                           = "terraform-redhat/rosa-hcp/rhcs"
+  version                          = "1.6.2"
+  cluster_name                     = var.cluster_name
+  openshift_version                = var.openshift_version
 
-  account_role_prefix    = "${var.cluster_name}-account"
-  ocm_environment        = "production"
-  rosa_openshift_version = local.openshift_version
-  account_role_policies  = data.rhcs_policies.all_policies.account_role_policies
-  operator_role_policies = data.rhcs_policies.all_policies.operator_role_policies
-  path                   = "/"
+  cluster_name           = var.cluster_name
+  openshift_version      = var.openshift_version
+  aws_region             = var.aws_region
+  aws_availability_zones = var.aws_availability_zones
+
+  create_account_roles   = true
+  create_operator_roles  = true
+  create_vpc             = true
+
+  operator_roles_prefix  = var.cluster_name
+  account_role_prefix    = var.cluster_name
+
+  create_oidc_provider   = true
 }
 
-# Create operator roles
-module "operator_roles" {
-  source  = "terraform-redhat/rosa-hcp/rhcs"
-  version = "1.6.2"
 
-  operator_role_prefix   = "${var.cluster_name}-operator"
-  account_role_prefix    = module.create_account_roles.account_role_prefix
-  ocm_environment        = "production"
-  rosa_openshift_version = local.openshift_version
-  operator_role_policies = data.rhcs_policies.all_policies.operator_role_policies
-  path                   = "/"
-}
 
 # Create OIDC config
 module "oidc_config_and_provider" {
@@ -116,13 +113,13 @@ resource "rhcs_cluster_rosa_hcp" "rosa_hcp_cluster" {
   # Compute configuration  
   replicas             = var.replicas
   compute_machine_type = var.compute_machine_type
+  aws_subnet_ids       = module.hcp.vpc_subnet_ids
 
-  # AWS and OpenShift configuration
-  aws_subnet_ids = local.private_cluster ? [
-    aws_subnet.private_subnets[0].id,
-    aws_subnet.private_subnets[1].id,
-    aws_subnet.private_subnets[2].id
-  ] : []
+#  aws_subnet_ids = local.private_cluster ? [
+#    aws_subnet.private_subnets[0].id,
+#    aws_subnet.private_subnets[1].id,
+#    aws_subnet.private_subnets[2].id
+#  ] : []
 
   # OIDC Configuration
   sts = {
