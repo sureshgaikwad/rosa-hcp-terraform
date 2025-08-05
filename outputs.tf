@@ -63,3 +63,11 @@ output "operator_role_prefix" {
   value       = module.operator_roles.operator_role_prefix
 }
 
+output "admin_username" {
+  value = module.rosa_hcp.admin_username
+}
+
+output "admin_password" {
+  value     = module.rosa_hcp.admin_password
+  sensitive = true
+}

@@ -76,6 +76,7 @@ module "rosa_hcp" {
   account_role_prefix    = var.cluster_name
 
   create_oidc_provider   = true
+  create_admin_user      = true 
 }
 
 
