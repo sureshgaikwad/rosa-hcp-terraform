@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Red Hat Cloud Services Configuration
+export RHCS_TOKEN="eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0NzQzYTkzMC03YmJiLTRkZGQtOTgzMS00ODcxNGRlZDc0YjUifQ.eyJpYXQiOjE3NTQzNzI4MzgsImp0aSI6IjY3NDg5ZDAyLWM1YTktNDkzZC04ZWVmLWUwNDUwNTc0NDU2YSIsImlzcyI6Imh0dHBzOi8vc3NvLnJlZGhhdC5jb20vYXV0aC9yZWFsbXMvcmVkaGF0LWV4dGVybmFsIiwiYXVkIjoiaHR0cHM6Ly9zc28ucmVkaGF0LmNvbS9hdXRoL3JlYWxtcy9yZWRoYXQtZXh0ZXJuYWwiLCJzdWIiOiJmOjUyOGQ3NmZmLWY3MDgtNDNlZC04Y2Q1LWZlMTZmNGZlMGNlNjpyaG4tc3VwcG9ydC1zZ2Fpa3dhZCIsInR5cCI6Ik9mZmxpbmUiLCJhenAiOiJjbG91ZC1zZXJ2aWNlcyIsIm5vbmNlIjoiYjEwNjkyYjEtZTk0MS00OTZlLWJjZjgtMmE1MWUwMGNlY2Q3Iiwic2lkIjoiYzRjM2Q3OTQtNmVhZS00MmQ1LTgxYzgtNzM2MTExMjM1YmQzIiwic2NvcGUiOiJvcGVuaWQgYmFzaWMgYXBpLmlhbS5zZXJ2aWNlX2FjY291bnRzIHJvbGVzIHdlYi1vcmlnaW5zIGNsaWVudF90eXBlLnByZV9rYzI1IG9mZmxpbmVfYWNjZXNzIn0._ythZ5bSHb3ygK6-lpOLe_gQiC3BGaaviIss9LFDoWGzCb3PwAHM6Y7Z5w8X8TVlRMiLt45lfH6zfcs3Wuu0rQ"
+export RHCS_URL="https://api.openshift.com"
+
+# AWS Configuration (if not using aws configure)
+# export AWS_ACCESS_KEY_ID="your-access-key"
+# export AWS_SECRET_ACCESS_KEY="your-secret-key"
+export AWS_REGION="ap-south-1"
+
+# Terraform Configuration
+export TF_VAR_admin_password="SecurePassword123!"
+
+echo "Environment variables set successfully!"
+echo "RHCS_TOKEN: ${RHCS_TOKEN:0:10}..."
+echo "AWS_REGION: $AWS_REGION"
